@@ -1,0 +1,35 @@
+CREATE TABLE University
+(
+uName varchar(50) NOT NULL,
+location varchar(50),
+PRIMARY KEY (uName),
+);
+
+CREATE TABLE Course
+(
+cName varchar(50) NOT NULL,
+credits int,
+universityName varchar(50) NOT NULL,
+PRIMARY KEY (cName),
+FOREIGN KEY (universityName) REFERENCES University(name),
+);
+
+CREATE TABLE Student
+(
+id integer NOT NULL,
+sName varchar(50),
+native_language char(2),
+universityName varchar(50) NOT NULL,
+PRIMARY KEY (id),
+FOREIGN KEY (universityName) REFERENCES University(name),
+);
+
+CREATE TABLE StudentsCourses
+(
+courseName varchar(50) NOT NULL PRIMARY KEY,
+studentId varchar(50) NOT NULL PRIMARY KEY,
+PRIMARY KEY (courseName, studentId),
+FOREIGN KEY (courseName) REFERENCES Course(cName),
+FOREIGN KEY (studentId) REFERENCES Student(id),
+);
+

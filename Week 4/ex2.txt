@@ -1,0 +1,90 @@
+-- PostgreSQL
+
+CREATE TABLE University
+(
+name varchar(50) NOT NULL PRIMARY KEY,
+location varchar(50)
+);
+
+CREATE TABLE Course
+(
+name varchar(50) NOT NULL PRIMARY KEY,
+credits integer,
+universityName varchar(50) NOT NULL,
+FOREIGN KEY (universityName) REFERENCES University(name)
+);
+
+CREATE TABLE Student
+(
+id integer NOT NULL PRIMARY KEY,
+name varchar(50),
+nativeLanguage char(2),
+universityName varchar(50) NOT NULL,
+FOREIGN KEY (universityName) REFERENCES University(name)
+);
+
+CREATE TABLE StudentsCourses
+(
+courseName varchar(50) NOT NULL,
+studentId integer NOT NULL,
+FOREIGN KEY (courseName) REFERENCES Course(name),
+FOREIGN KEY (studentId) REFERENCES Student(id),
+PRIMARY KEY (courseName, studentId)
+);
+
+
+
+INSERT INTO University (name, location)
+VALUES ('Innopolis University', 'Russia');
+
+INSERT INTO University (name, location)
+VALUES ('Stanford University', 'USA');
+
+INSERT INTO Student (id, name, nativeLanguage, universityName)
+VALUES (0, 'Egor', 'ru', 'Innopolis University');
+
+INSERT INTO Student (id, name, nativeLanguage, universityName)
+VALUES (1, 'Alex', 'en', 'Innopolis University');
+
+INSERT INTO Student (id, name, nativeLanguage, universityName)
+VALUES (2, 'Oliver', 'ru', 'Stanford University');
+
+INSERT INTO Course (name, credits, universityName)
+VALUES ('Databases', 6, 'Innopolis University');
+
+INSERT INTO Course (name, credits, universityName)
+VALUES ('Networks', 4, 'Innopolis University');
+
+INSERT INTO Course (name, credits, universityName)
+VALUES ('Mathematical Analysis', 6, 'Stanford University');
+
+INSERT INTO StudentsCourses (courseName, studentId)
+VALUES ('Databases', 0);
+
+INSERT INTO StudentsCourses (courseName, studentId)
+VALUES ('Networks', 0);
+
+INSERT INTO StudentsCourses (courseName, studentId)
+VALUES ('Mathematical Analysis', 1);
+
+
+
+SELECT * FROM University
+WHERE location='Russia';
+
+SELECT University.location
+FROM Student
+JOIN University ON Student.universityName=University.name
+WHERE University.location!='Russia' AND Student.nativeLanguage='ru';
+
+SELECT id FROM Student
+WHERE universityName='Innopolis University';
+
+SELECT name, universityName
+FROM Course
+WHERE (credits>5);
+
+SELECT University.name
+FROM Student
+JOIN University ON Student.universityName=University.name
+WHERE Student.nativeLanguage='en';
