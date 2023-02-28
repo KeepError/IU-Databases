@@ -1,4 +1,4 @@
- -- Normalization
+-- a. Normalization
 
 CREATE TABLE customers (
   customerId INT,
@@ -50,5 +50,19 @@ INSERT INTO orders_items VALUES ('2303', '4011', '2');
 INSERT INTO orders_items VALUES ('2303', '3141', '2');
 
 
--- Task b
+-- b. queries
 
+SELECT orderId, SUM (orders_items.quantity * items.price) AS total_amount FROM orders_items
+JOIN items ON orders_items.itemId = items.itemId
+GROUP BY orderId
+ORDER BY total_amount ASC
+LIMIT 1;
+
+
+SELECT customers.customerId, customername, SUM(quantity) as items_number
+FROM orders_items
+JOIN orders ON orders_items.orderId = orders.orderId
+JOIN customers ON orders.customerId = customers.customerId
+GROUP BY customers.customerId
+ORDER BY items_number DESC
+LIMIT 1;
