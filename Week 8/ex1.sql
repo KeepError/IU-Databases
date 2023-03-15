@@ -29,3 +29,5 @@ SELECT * FROM customer
 WHERE id=11756;
 
 DROP INDEX hash_idx;
+
+-- Query using hash index is the fastest, query without index is the slowest
