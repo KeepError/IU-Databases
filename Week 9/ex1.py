@@ -13,6 +13,7 @@ def get_latitude_longitude(address):
     except:
         return (0,0)
 
+# Replace arguments
 con = psycopg2.connect(database="dvdrental", user="user",
                        password="pwd", host="127.0.0.1", port="5000")
 
@@ -20,6 +21,7 @@ print("Database opened successfully")
 con.set_session(autocommit=True)
 
 cur_update = con.cursor()
+
 cur_func = con.cursor()
 cur_func.callproc('get_addresses', ())
 row = cur_func.fetchone()
