@@ -1,3 +1,7 @@
+ALTER TABLE address
+ADD COLUMN latitude real,
+ADD COLUMN longitude real;
+
 CREATE OR REPLACE FUNCTION get_addresses()
 RETURNS TABLE (
     address_id INTEGER,

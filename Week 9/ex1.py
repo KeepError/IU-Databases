@@ -17,16 +17,20 @@ con = psycopg2.connect(database="dvdrental", user="user",
                        password="pwd", host="127.0.0.1", port="5000")
 
 print("Database opened successfully")
-cur = con.cursor()
-cur.callproc('get_addresses', ())
-row = cur.fetchone()
+con.set_session(autocommit=True)
+
+cur_update = con.cursor()
+cur_func = con.cursor()
+cur_func.callproc('get_addresses', ())
+row = cur_func.fetchone()
 while row is not None:
     print("==== NEW ROW ==")
     print(row)
     r = row[2]
     lat, long = get_latitude_longitude(r)
     print("Lat, Long: ", lat, long)
-    cur.execute("UPDATE address SET latitude = %s, longitude = %s WHERE address_id = %s", (lat, long, row[0]))
+    cur_update.execute("UPDATE address SET latitude = %s, longitude = %s WHERE address_id = %s", (lat, long, row[0]))
     print("Row updated")
-    row = cur.fetchone()
-cur.close()
+    row = cur_func.fetchone()
+cur_update.close()
+cur_func.close()
