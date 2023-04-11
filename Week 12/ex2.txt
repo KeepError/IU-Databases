@@ -1,0 +1,32 @@
+// Task 1
+MATCH (f:Fighter)
+WHERE f.weight IN [155, 170, 185] AND (f)-[:beats]->()
+RETURN f.weight, COLLECT(f.name);
+
+
+// Task 2
+MATCH (f1:Fighter)-[:beats]->(f2:Fighter)-[:beats]->(f1)
+RETURN f1.name, f2.name;
+
+
+// Task 3
+MATCH (f:Fighter)-[b:beats]-()
+WITH f, count(b) AS totalFights
+RETURN f.name, totalFights
+ORDER BY totalFights DESC;
+
+
+// Task 4
+MATCH (f:Fighter)
+OPTIONAL MATCH (f)-[w:beats]->()
+WITH f, COUNT(w) as wins
+WHERE wins = 0
+RETURN COLLECT(f.name), "defeated" AS type
+
+UNION
+
+MATCH (f:Fighter)
+OPTIONAL MATCH ()-[l:beats]->(f)
+WITH f, COUNT(l) as losses
+WHERE losses = 0
+RETURN COLLECT(f.name), "undefeated" AS type;
